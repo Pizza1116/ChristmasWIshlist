@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <link rel="icon" href="data:," />
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎄 2025 Holiday Gift Exchange 🎁</title>
+    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Playfair+Display:ital,wght@0,400;0,600;0,800;1,400&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --gold-text: #F2D492;
+            --vintage-red: #9B1B30;
+            --text-main: #333;
+            --forest-green: #1A3C34;
+        }
+
+        body {
+            font-family: 'Playfair Display', serif;
+            background-color: #FFFFFF;
+            margin: 0; padding: 0;
+            color: var(--text-main);
+            min-height: 100vh;
+        }
+
+        /* [1] 로그인 오버레이 */
+        #loginOverlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background-color: var(--vintage-red);
+            background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7z' fill='%23ffffff' fill-opacity='0.05' fill-rule='evenodd'/%3E%3C/svg%3E");
+            display: flex; justify-content: center; align-items: center; z-index: 9999;
+        }
+        .login-box {
+            background: #FCFBF7; padding: 50px 30px; 
+            border: 4px double var(--vintage-red); text-align: center; 
+            width: 85%; max-width: 380px; box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+        }
+        .login-box h2 { font-size: 2em; margin-bottom: 20px; color: var(--vintage-red); }
+        .login-box input { 
+            width: 80%; padding: 12px; margin-bottom: 15px; border: 1px solid #ddd; 
+            text-align: center; font-family: inherit; font-size: 16px;
+        }
+        .login-btn { 
+            background: var(--forest-green); color: var(--gold-text); border: none; 
+            padding: 12px 30px; cursor: pointer; font-size: 16px; 
+            font-family: inherit; width: 90%; transition: 0.3s;
+        }
+        .login-btn:hover { background: #0f2520; }
+
+        /* [2] 헤더 섹션 */
+        header { 
+            position: relative; width: 100%; height: 70vh; min-height: 500px;
+            /* 다운로드 받은 이미지 파일명으로 꼭 확인해주세요! */
+            background-image: url('treefinal.jpg'); 
+            background-size: cover; background-position: center;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            text-align: center; overflow: hidden; color: var(--gold-text);
+        }
+        header::after {
+            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(to bottom, rgba(0,0,0,0.3), rgba(0,0,0,0.6)); z-index: 1;
+        }
+        .header-content { position: relative; z-index: 2; width: 100%; max-width: 1000px; }
+
+        h1 { margin: 0; line-height: 0.8; }
+        .script-text {
+            font-family: 'Great Vibes', cursive; font-size: 5rem; display: block;
+            margin-bottom: -10px; font-weight: 400; text-shadow: 0 4px 10px rgba(0,0,0,0.5);
+            transform: rotate(-5deg);
+        }
+        .serif-text {
+            font-family: 'Playfair Display', serif; font-size: 13vw; display: block;
+            font-weight: 600; letter-spacing: -2px; color: var(--gold-text);
+            text-transform: uppercase; text-shadow: 0 10px 30px rgba(0,0,0,0.6);
+        }
+
+        /* 유저 컨트롤 영역 수정됨 */
+        .user-controls {
+            margin-top: 40px; font-family: 'Playfair Display', serif;
+            display: flex; flex-direction: column; align-items: center; gap: 10px;
+            color: rgba(255,255,255,0.9);
+        }
+        .welcome-line { font-size: 1.2rem; display: flex; align-items: center; gap: 10px; }
+        .welcome-name { font-style: italic; font-weight: bold; border-bottom: 1px solid rgba(242, 212, 146, 0.5); }
+        
+        .btn-group { display: flex; gap: 10px; margin-top: 5px; }
+        
+        /* 버튼 스타일 분리 */
+        .header-btn {
+            background: transparent; border: 1px solid rgba(242, 212, 146, 0.4);
+            color: rgba(242, 212, 146, 0.8); padding: 6px 15px; border-radius: 20px;
+            cursor: pointer; font-family: inherit; font-size: 0.75em;
+            text-transform: uppercase; letter-spacing: 1px; transition: all 0.3s;
+        }
+        .header-btn:hover { background: var(--gold-text); color: #000; }
+        
+        /* 수정 버튼은 조금 더 작게 */
+        .edit-btn { border-color: transparent; font-size: 0.8em; padding: 2px 5px; } 
+        .edit-btn:hover { color: #fff; background: transparent; transform: scale(1.1); }
+
+        /* [3] 메인 컨텐츠 */
+        .main-section { background-color: #fff; padding: 60px 20px; min-height: 50vh; }
+        .container { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 40px; max-width: 1200px; margin: 0 auto; }
+
+        .family-card {
+            background: #fff; border: 1px solid #eee; border-radius: 8px;
+            overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.03); transition: transform 0.3s;
+        }
+        .family-card:hover { transform: translateY(-5px); box-shadow: 0 15px 40px rgba(0,0,0,0.08); }
+
+        .card-header {
+            padding: 20px; text-align: center; font-size: 1.3em; font-weight: bold;
+            color: var(--text-main); border-bottom: 1px solid #f4f4f4; letter-spacing: -0.5px;
+        }
+        .is-me { border: 1px solid var(--vintage-red); }
+        .is-me .card-header { color: var(--vintage-red); }
+
+        .card-body { padding: 25px; }
+        ul { list-style: none; padding: 0; margin: 0; }
+        li {
+            margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px dotted #eee;
+            display: flex; justify-content: space-between; align-items: center;
+            color: #555; font-size: 1.05em;
+        }
+        li:last-child { border-bottom: none; }
+        
+        .claimed-item { color: #ccc; text-decoration: line-through; }
+        .action-btn { background: none; border: none; cursor: pointer; color: #999; transition: color 0.2s;}
+        .delete-btn:hover { color: var(--vintage-red); }
+
+        .claim-btn { 
+            font-size: 0.75em; padding: 6px 12px; border: 1px solid #ddd; 
+            background: #fff; color: #666; text-transform: uppercase; 
+            letter-spacing: 1px; cursor: pointer; transition: all 0.2s;
+        }
+        .claim-btn:hover { border-color: var(--forest-green); color: var(--forest-green); }
+        .claim-btn.my-claim { background: var(--forest-green); color: #fff; border-color: var(--forest-green); }
+        .claim-btn.claimed { border: none; background: #f9f9f9; color: #ccc; cursor: default; }
+
+        .add-box { margin-top: 10px; display: flex; border-top: 1px solid #f4f4f4; padding-top: 15px; }
+        .add-box input { flex: 1; padding: 10px; border: none; background: #f9f9f9; font-family: inherit; margin-right: 5px; }
+        .add-box button { background: var(--text-main); color: #fff; border: none; padding: 0 15px; cursor: pointer; }
+
+        @media (max-width: 768px) {
+            .script-text { font-size: 3.5rem; }
+            .serif-text { font-size: 18vw; }
+            header { height: 60vh; min-height: 400px; }
+            .container { grid-template-columns: 1fr; gap: 20px;}
+        }
+    </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.14.0/Sortable.min.css"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.14.0/Sortable.min.js"></script>
+</head>
+<body>
+
+    <div id="loginOverlay">
+        <div class="login-box">
+            <div style="font-size:3em; color:#143D28; margin-bottom:10px;"><i class="fas fa-tree"></i></div>
+            <h2>Guest List</h2>
+            <p style="color:#666; font-style:italic; margin-bottom:30px;">Please enter your name</p>
+            <input type="text" id="loginNameInput" placeholder="Name" onkeypress="if(event.keyCode==13) login()">
+            <button class="login-btn" onclick="login()">ENTER</button>
+        </div>
+    </div>
+
+    <header>
+        <div class="header-content">
+            <h1>
+                <span class="script-text">Happy</span>
+                <span class="serif-text">HOLIDAYS</span>
+            </h1>
+            
+            <div class="user-controls">
+                <div class="welcome-line">
+                    Welcome, <span class="welcome-name" id="userInfoDisplay"></span>
+                    <button class="header-btn edit-btn" onclick="renameUser()" title="이름 변경(Rename)">
+                        <i class="fas fa-pen"></i>
+                    </button>
+                </div>
+                
+                <div class="btn-group">
+                    <button class="header-btn" onclick="logout()">Log Out</button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="main-section">
+        <div class="container" id="cardContainer"></div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        // [중요] deleteDoc이 추가되었습니다!
+        import { getFirestore, collection, doc, setDoc, onSnapshot, updateDoc, getDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+        // [중요] Firebase 설정 복사 위치
+        const firebaseConfig = {
+        apiKey: "AIzaSyAhz4dqfFo966SYle88odaVuYwrk_euU7E",
+        authDomain: "christmas-wishlist-32ad9.firebaseapp.com",
+        projectId: "christmas-wishlist-32ad9",
+        storageBucket: "christmas-wishlist-32ad9.firebasestorage.app",
+        messagingSenderId: "638733786100",
+        appId: "1:638733786100:web:2fb402ab376b7cf59277a1",
+        measurementId: "G-603N2QWB04"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+        const listCollection = collection(db, "familyLists");
+
+        let myName = ""; 
+
+        // 1. 접속 시 이름 확인
+        const savedName = localStorage.getItem("myFamilyName");
+        if (savedName) {
+            myName = savedName;
+            document.getElementById("loginOverlay").style.display = "none";
+            updateWelcomeMsg();
+            initMyList(); 
+        }
+
+        function updateWelcomeMsg() {
+            document.getElementById("userInfoDisplay").innerText = myName;
+        }
+
+        // 2. 로그인 (처음 접속)
+        window.login = function() {
+            const input = document.getElementById("loginNameInput").value.trim();
+            if(!input) return alert("이름을 입력해주세요!");
+            
+            myName = input;
+            localStorage.setItem("myFamilyName", myName);
+            document.getElementById("loginOverlay").style.display = "none";
+            updateWelcomeMsg();
+            initMyList();
+        }
+
+        // 3. 로그아웃 (다른 사람으로 로그인)
+        window.logout = function() {
+            if(confirm("로그아웃 하시겠습니까?")) {
+                localStorage.removeItem("myFamilyName");
+                location.reload(); 
+            }
+        }
+
+        // [새로운 기능] 4. 이름 변경 (데이터 유지)
+        window.renameUser = async function() {
+            const newName = prompt("변경할 이름을 입력하세요 (리스트 내용은 유지됩니다):", myName);
+            if (!newName || newName === myName) return; // 취소하거나 같으면 중단
+
+            // 이미 존재하는 이름인지 확인 (덮어쓰기 방지)
+            const newDocRef = doc(db, "familyLists", newName);
+            const newDocSnap = await getDoc(newDocRef);
+            
+            if (newDocSnap.exists()) {
+                alert("이미 존재하는 이름입니다! '로그아웃' 후 해당 이름으로 로그인하거나, 다른 이름을 사용해주세요.");
+                return;
+            }
+
+            // 데이터 이동 시작
+            try {
+                const oldDocRef = doc(db, "familyLists", myName);
+                const oldDocSnap = await getDoc(oldDocRef);
+                
+                if (oldDocSnap.exists()) {
+                    const data = oldDocSnap.data();
+                    
+                    // 1. 새 이름으로 데이터 복사
+                    await setDoc(newDocRef, data);
+                    
+                    // 2. 옛날 이름 데이터 삭제
+                    await deleteDoc(oldDocRef);
+                    
+                    // 3. 내 브라우저 정보 업데이트
+                    localStorage.setItem("myFamilyName", newName);
+                    myName = newName;
+                    
+                    alert(`이름이 '${newName}'(으)로 변경되었습니다!`);
+                    updateWelcomeMsg();
+                    // 화면 갱신을 위해 새로고침 (깔끔하게)
+                    location.reload();
+                }
+            } catch (e) {
+                console.error("Error renaming: ", e);
+                alert("이름 변경 중 오류가 발생했습니다.");
+            }
+        }
+
+        async function initMyList() {
+            const docRef = doc(db, "familyLists", myName);
+            const docSnap = await getDoc(docRef);
+            if (!docSnap.exists()) {
+                await setDoc(docRef, { items: [] });
+            }
+        }
+
+        onSnapshot(listCollection, (snapshot) => {
+            const container = document.getElementById("cardContainer");
+            container.innerHTML = ""; 
+
+            const docs = [];
+            snapshot.forEach(doc => docs.push({ id: doc.id, ...doc.data() }));
+            docs.sort((a, b) => (a.id === myName ? -1 : b.id === myName ? 1 : 0));
+
+            docs.forEach(userDoc => {
+                const isMe = userDoc.id === myName;
+                const card = document.createElement("div");
+                card.className = `family-card ${isMe ? 'is-me' : ''}`;
+                
+                let itemsHtml = "";
+                const items = userDoc.items || [];
+
+                items.forEach((item, index) => {
+                    const isClaimed = item.claimedBy ? true : false;
+                    const claimedByMe = item.claimedBy === myName;
+                    
+                    let actionButton = "";
+
+                    if (isMe) {
+                        actionButton = `<button class="action-btn delete-btn" onclick="deleteItem('${userDoc.id}', ${index})"><i class="fas fa-times"></i></button>`;
+                    } else {
+                        if (!isClaimed) {
+                            actionButton = `<button class="claim-btn" onclick="toggleClaim('${userDoc.id}', ${index})">Pick</button>`;
+                        } else if (claimedByMe) {
+                            actionButton = `<button class="claim-btn my-claim" onclick="toggleClaim('${userDoc.id}', ${index})">Cancel</button>`;
+                        } else {
+                            actionButton = `<button class="claim-btn claimed">Reserved</button>`;
+                        }
+                    }
+
+                    const liClass = isClaimed ? "claimed-item" : (isMe ? "my-item" : "");
+                    
+                    itemsHtml += `
+                        <li class="${liClass}" data-index="${index}">
+                            <span>${item.text}</span>
+                            ${actionButton}
+                        </li>
+                    `;
+                });
+
+                card.innerHTML = `
+                    <div class="card-header">
+                        ${isMe ? '<i class="fas fa-gift" style="color:#9B1B30; margin-right:5px;"></i>' : ''} 
+                        ${userDoc.id}
+                    </div>
+                    <div class="card-body">
+                        <ul id="list-${userDoc.id}">${itemsHtml}</ul>
+                        ${isMe ? `
+                            <div class="add-box">
+                                <input type="text" id="newItemInput" placeholder="Add a wish..." onkeypress="if(event.keyCode==13) addItem()">
+                                <button onclick="addItem()"><i class="fas fa-plus"></i></button>
+                            </div>
+                        ` : ''}
+                    </div>
+                `;
+
+                container.appendChild(card);
+
+                if (isMe) {
+                    const el = card.querySelector(`#list-${userDoc.id}`);
+                    new Sortable(el, {
+                        animation: 150,
+                        onEnd: function (evt) {
+                            reorderItems(userDoc.id, evt.oldIndex, evt.newIndex, items);
+                        }
+                    });
+                }
+            });
+        });
+
+        window.addItem = async function() {
+            const input = document.getElementById("newItemInput");
+            const text = input.value.trim();
+            if (!text) return;
+            const docRef = doc(db, "familyLists", myName);
+            const docSnap = await getDoc(docRef);
+            const currentItems = docSnap.data().items || [];
+            currentItems.push({ text: text, claimedBy: null });
+            await updateDoc(docRef, { items: currentItems });
+            input.value = ""; 
+        }
+
+        window.deleteItem = async function(docId, index) {
+            if(!confirm("삭제하시겠습니까?")) return;
+            const docRef = doc(db, "familyLists", docId);
+            const docSnap = await getDoc(docRef);
+            const currentItems = docSnap.data().items;
+            currentItems.splice(index, 1);
+            await updateDoc(docRef, { items: currentItems });
+        }
+
+        window.toggleClaim = async function(docId, index) {
+            const docRef = doc(db, "familyLists", docId);
+            const docSnap = await getDoc(docRef);
+            const currentItems = docSnap.data().items;
+            const item = currentItems[index];
+
+            if (item.claimedBy === myName) {
+                if(confirm("취소하시겠습니까?")) item.claimedBy = null;
+                else return;
+            } else if (!item.claimedBy) {
+                item.claimedBy = myName;
+            } else {
+                return;
+            }
+            await updateDoc(docRef, { items: currentItems });
+        }
+
+        window.reorderItems = async function(docId, oldIndex, newIndex, currentItems) {
+            const [movedItem] = currentItems.splice(oldIndex, 1);
+            currentItems.splice(newIndex, 0, movedItem);
+            const docRef = doc(db, "familyLists", docId);
+            await updateDoc(docRef, { items: currentItems });
+        }
+    </script>
+</body>
+</html>
