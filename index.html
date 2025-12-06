@@ -406,6 +406,9 @@
                         animation: 150,
                         filter: '.action-btn', 
                         preventOnFilter: false,
+                        forceFallback: true,      // 모바일에서도 강제로 복제본을 만들어 드래그함
+                        fallbackOnBody: true,     // 드래그 중인 아이템을 마스크(흐림 효과) 밖으로 빼냄
+                        touchStartThreshold: 5,   // 터치 실수 방지 (살짝 건드려도 드래그되는 것 방지)
                         onEnd: function (evt) {
                             reorderItems(userDoc.id, evt.oldIndex, evt.newIndex, items);
                         }
@@ -491,4 +494,5 @@
         }
     </script>
 </body>
+
 </html>
